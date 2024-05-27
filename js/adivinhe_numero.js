@@ -1,72 +1,72 @@
-var numeroAleatorio = Math.floor(Math.random() * 100) + 1;
+let numeroAleatorio = Math.floor(Math.random() * 100) + 1	 // número aleatório para o jogo
 
-		var palpites = document.querySelector(".palpites");
-		var ultimoResultado = document.querySelector(".ultimoResultado");
-		var baixoOuAlto = document.querySelector(".baixoOuAlto");
+const palpites = document.querySelector(".palpites")				// obtém elementos da página
+const ultimoResultado = document.querySelector(".ultimoResultado")
+const baixoOuAlto = document.querySelector(".baixoOuAlto")
 
-		var envioPalpite = document.querySelector(".envioPalpite");
-		var campoPalpite = document.querySelector(".campoPalpite");
+const envioPalpite = document.querySelector(".envioPalpite")
+const campoPalpite = document.querySelector(".campoPalpite")
 
-		var contagemPalpites = 1;
-		var botaoReinicio;
-		
-		function conferirPalpite() {
-			var palpiteUsuario = Number(campoPalpite.value);
-			if (contagemPalpites === 1) {
-				palpites.textContent = "Palpites anteriores: ";
-			}
-			palpites.textContent += palpiteUsuario + " ";
+let contagemPalpites = 1	// cria o contador
+let botaoReinicio
 
-			if (palpiteUsuario === numeroAleatorio) {
-				ultimoResultado.textContent = "Parabéns! Você acertou!";
-				ultimoResultado.style.backgroundColor = "green";
-				baixoOuAlto.textContent = "";
-				configFimDeJogo();
-			} else if (contagemPalpites === 10) {
-				ultimoResultado.textContent = "!!!FIM DE JOGO!!!";
-				baixoOuAlto.textContent = "";
-				configFimDeJogo();
-			} else {
-				ultimoResultado.textContent = "Errado!";
-				ultimoResultado.style.backgroundColor = "rgb(150, 0, 0)"; // vermelho mais ameno
-				if (palpiteUsuario < numeroAleatorio) {
-					baixoOuAlto.textContent = "Seu palpite está muito baixo!";
-				} else if (palpiteUsuario > numeroAleatorio) {
-					baixoOuAlto.textContent = "Seu palpite está muito alto!";
-				}
-			}
+function conferirPalpite() {
+	const palpiteUsuario = Number(campoPalpite.value);
+	if (contagemPalpites === 1) {						// se primeiro palpite
+		palpites.textContent = "Palpites anteriores: "	// exibe...
+	}
+	palpites.textContent += palpiteUsuario + " "		// concatena os palpites do usuário
 
-			contagemPalpites++;
-			campoPalpite.value = "";
-			campoPalpite.focus();
+	if (palpiteUsuario === numeroAleatorio) {			// palpite igual ao número aleatório
+		ultimoResultado.textContent = "Parabéns! Você acertou!"
+		ultimoResultado.style.backgroundColor = "green"
+		baixoOuAlto.textContent = ""
+		configFimDeJogo()
+	} else if (contagemPalpites === 10) {				// não resta mais palpites
+		ultimoResultado.textContent = "!!!FIM DE JOGO!!!";
+		baixoOuAlto.textContent = ""
+		configFimDeJogo()
+	} else {
+		ultimoResultado.textContent = "Errado!"
+		ultimoResultado.style.backgroundColor = "rgb(150, 0, 0)"	// vermelho mais ameno
+		if (palpiteUsuario < numeroAleatorio) {
+			baixoOuAlto.textContent = "Seu palpite está muito baixo!"
+		} else if (palpiteUsuario > numeroAleatorio) {
+			baixoOuAlto.textContent = "Seu palpite está muito alto!"
 		}
-		envioPalpite.addEventListener("click", conferirPalpite);
+	}
 
-		function configFimDeJogo() {
-			campoPalpite.disabled = true;
-			envioPalpite.disabled = true;
-			botaoReinicio = document.createElement("button");
-			botaoReinicio.textContent = "Iniciar novo jogo";
-			document.body.append(botaoReinicio);
-			botaoReinicio.addEventListener("click", reiniciarJogo);
-		}
+	contagemPalpites++										// incrementa a contagem de palpites
+	campoPalpite.value = ""
+	campoPalpite.focus()
+}
+envioPalpite.addEventListener("click", conferirPalpite)		// "ouvinte" evento submit
 
-		function reiniciarJogo() {
-			contagemPalpites = 1;
+function configFimDeJogo() {
+	campoPalpite.disabled = true
+	envioPalpite.disabled = true
+	botaoReinicio = document.createElement("button")		// cria botão "Iniciar Novo Jogo"
+	botaoReinicio.textContent = "Iniciar Novo Jogo"
+	document.body.append(botaoReinicio)						// ?
+	botaoReinicio.addEventListener("click", reiniciarJogo)	// "ouvinte" evento button
+}
 
-			var reiniciarParas = document.querySelectorAll(".resultadoParas p");
-			for (var reiniciarPara of reiniciarParas) {
-				reiniciarPara.textContent = "";
-			}
+function reiniciarJogo() {
+	contagemPalpites = 1			// reinicia a contagem de palpites
 
-			botaoReinicio.parentNode.removeChild(botaoReinicio);
+	const reiniciarParas = document.querySelectorAll(".resultadoParas p");
+	for (let reiniciarPara of reiniciarParas) {
+		reiniciarPara.textContent = ""
+	}
 
-			campoPalpite.disabled = false;
-			envioPalpite.disabled = false;
-			campoPalpite.value = "";
-			campoPalpite.focus();
+	botaoReinicio.parentNode.removeChild(botaoReinicio)		// remove o botão "Iniciar Novo Jogo"
 
-			ultimoResultado.style.backgroundColor = "white";
+	campoPalpite.disabled = false
+	envioPalpite.disabled = false
+	campoPalpite.value = ""
+	campoPalpite.focus()
 
-			numeroAleatorio = Math.floor(Math.random() * 100) + 1;
-		}
+	ultimoResultado.style.backgroundColor = "white"
+
+	numeroAleatorio = Math.floor(Math.random() * 100) + 1	// gera novo número aleatório
+}
