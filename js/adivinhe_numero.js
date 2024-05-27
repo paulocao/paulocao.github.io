@@ -1,42 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Adivinhação</title>
-	<style>
-		body {
-			background-color: rgb(37, 150, 190);
-			font: normal 20pt Arial;
-		}
-		label {
-			font: normal 20pt Arial;
-		}
-		input {
-			font: normal 20pt Arial;
-		}
-		button {
-			font: normal 20pt Arial;
-		}
-	</style>
-</head>
-<body>
-	<h1>Adivinhação de números</h1>
-	<p>
-		Selecionamos um número aleatório entre 1 e 100. Veja se você consegue adivinhar em 10 turnos ou menos. Diremos se seu palpite foi muito alto ou muito baixo.
-	</p>
-	<label for="campoPalpite">Digite seu palpite: </label>
-	<input type="text" id="campoPalpite" class="campoPalpite" />
-	<input type="submit" value="Enviar palpite" class="envioPalpite" />
-
-<div class="resultadoParas">
-	<p class="palpites"></p>
-	<p class="ultimoResultado"></p>
-	<p class="baixoOuAlto"></p>
-</div>
-
-	<script>
-		var numeroAleatorio = Math.floor(Math.random() * 100) + 1;
+var numeroAleatorio = Math.floor(Math.random() * 100) + 1;
 
 		var palpites = document.querySelector(".palpites");
 		var ultimoResultado = document.querySelector(".ultimoResultado");
@@ -108,6 +70,3 @@
 
 			numeroAleatorio = Math.floor(Math.random() * 100) + 1;
 		}
-	</script>
-</body>
-</html>
