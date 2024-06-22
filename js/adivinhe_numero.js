@@ -1,72 +1,44 @@
-let numeroAleatorio = Math.floor(Math.random() * 100) + 1	 // número aleatório para o jogo
+const frm = document.querySelector("form")  // obtém elementos da página
+const respErros = document.querySelector("#outErros")
+const respChances = document.querySelector("#outChances")
+const respDica = document.querySelector("#outDica")
 
-const palpites = document.querySelector(".palpites")				// obtém elementos da página
-const ultimoResultado = document.querySelector(".ultimoResultado")
-const baixoOuAlto = document.querySelector(".baixoOuAlto")
+const erros = [] // vetor de escopo global com números já apostados
+const sorteado = Math.floor(Math.random() * 100) + 1 // num aleatório entre 1 e 100
+const CHANCES = 10   // constante com o número máximo de chances
 
-const envioPalpite = document.querySelector(".envioPalpite")
-const campoPalpite = document.querySelector(".campoPalpite")
-
-let contagemPalpites = 1	// cria o contador
-let botaoReinicio
-
-function conferirPalpite() {
-	const palpiteUsuario = Number(campoPalpite.value);
-	if (contagemPalpites === 1) {						// se primeiro palpite
-		palpites.textContent = "Palpites anteriores: "	// exibe...
-	}
-	palpites.textContent += palpiteUsuario + " "		// concatena os palpites do usuário
-
-	if (palpiteUsuario === numeroAleatorio) {			// palpite igual ao número aleatório
-		ultimoResultado.textContent = "Parabéns! Você acertou!"
-		ultimoResultado.style.backgroundColor = "green"
-		baixoOuAlto.textContent = ""
-		configFimDeJogo()
-	} else if (contagemPalpites === 10) {				// não resta mais palpites
-		ultimoResultado.textContent = "!!!FIM DE JOGO!!!";
-		baixoOuAlto.textContent = ""
-		configFimDeJogo()
-	} else {
-		ultimoResultado.textContent = "Errado!"
-		ultimoResultado.style.backgroundColor = "rgb(150, 0, 0)"	// vermelho mais ameno
-		if (palpiteUsuario < numeroAleatorio) {
-			baixoOuAlto.textContent = "Seu palpite está muito baixo!"
-		} else if (palpiteUsuario > numeroAleatorio) {
-			baixoOuAlto.textContent = "Seu palpite está muito alto!"
-		}
-	}
-
-	contagemPalpites++										// incrementa a contagem de palpites
-	campoPalpite.value = ""
-	campoPalpite.focus()
-}
-envioPalpite.addEventListener("click", conferirPalpite)		// "ouvinte" evento submit
-
-function configFimDeJogo() {
-	campoPalpite.disabled = true
-	envioPalpite.disabled = true
-	botaoReinicio = document.createElement("button")		// cria botão "Iniciar Novo Jogo"
-	botaoReinicio.textContent = "Iniciar Novo Jogo"
-	document.body.append(botaoReinicio)						// ?
-	botaoReinicio.addEventListener("click", reiniciarJogo)	// "ouvinte" evento button
-}
-
-function reiniciarJogo() {
-	contagemPalpites = 1			// reinicia a contagem de palpites
-
-	const reiniciarParas = document.querySelectorAll(".resultadoParas p");
-	for (let reiniciarPara of reiniciarParas) {
-		reiniciarPara.textContent = ""
-	}
-
-	botaoReinicio.parentNode.removeChild(botaoReinicio)		// remove o botão "Iniciar Novo Jogo"
-
-	campoPalpite.disabled = false
-	envioPalpite.disabled = false
-	campoPalpite.value = ""
-	campoPalpite.focus()
-
-	ultimoResultado.style.backgroundColor = "white"
-
-	numeroAleatorio = Math.floor(Math.random() * 100) + 1	// gera novo número aleatório
-}
+frm.addEventListener("submit", (e) => {     // "escuta" evento submit do form
+    e.preventDefault()      // evita envio do form
+    const numero = Number(frm.inNumero.value)   // obtém número digitado
+    if (numero == sorteado) {   // se acertou
+        respDica.innerText = `Parabéns!! Número sorteado: ${sorteado}`
+        frm.btSubmit.disabled = true    // troca status dos botões
+        frm.btNovo.className = "exibe"
+    } else {
+        if (erros.includes(numero)) {   // se número existe no vetor erros (já apostou)
+            alert(`Você já apostou o número ${numero}. Tente outro...`)
+        } else {
+            erros.push(numero)              // adiciona número ao vetor
+            const numErros = erros.length   // obtém tamanho do vetor
+            const numChances = CHANCES - numErros   // calcula nº de chances
+            // exibe nº de erros, contéudo do vetor e nº de chances
+            respErros.innerText = `${numErros} (${erros.join(", ")})`
+            respChances.innerText = numChances
+            if (numChances == 0) {
+                alert("Suas chances acabaram...")
+                frm.btSubmit.disabled = true
+                frm.btNovo.className = "exibe"
+                respDica.innerText = `Game Over!! Número Sorteado: ${sorteado}`
+            } else {
+                // usa operador ternário para mensagem da dica
+                const dica = numero < sorteado ? "maior" : "menor"
+                respDica.innerText = `Dica: tente um número ${dica} que ${numero}`
+            }
+        }
+    }
+    frm.inNumero.value = ""     // limpa campo de entrada
+    frm.inNumero.focus()        // posiciona cursor neste campo
+})
+frm.btNovo.addEventListener("click", () => {
+    location.reload()       // recarrega a página
+})  
