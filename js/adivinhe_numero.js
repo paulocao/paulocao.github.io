@@ -6,8 +6,8 @@ const respDica = document.querySelector("#outDica")
 function escolhePrimeiro() {
     const escolha = document.querySelector('input[name="opcao"]:checked')
     //escolha.disabled = true
-    respChances.innerText = escolha.value
-    console.log(Number(escolha.value))
+    respChances.innerText = escolha.value   // posiciona cursor neste campo
+    frm.inNumero.focus()
     return Number(escolha.value)
 }
 
