@@ -3,12 +3,30 @@ const respErros = document.querySelector("#outErros")
 const respChances = document.querySelector("#outChances")
 const respDica = document.querySelector("#outDica")
 
+function escolhePrimeiro() {
+    const escolha = document.querySelector('input[name="opcao"]:checked')
+    //escolha.disabled = true
+    respChances.innerText = escolha.value
+    console.log(Number(escolha.value))
+    return Number(escolha.value)
+}
+
+let esco = escolhePrimeiro()
+
+function disable() {    // desativa os radios
+    frm.inFacil.disabled = true
+    frm.inNormal.disabled = true
+    frm.inDificil.disabled = true
+}
+
 const erros = [] // vetor de escopo global com números já apostados
 const sorteado = Math.floor(Math.random() * 100) + 1 // num aleatório entre 1 e 100
-const CHANCES = 10   // constante com o número máximo de chances
 
 frm.addEventListener("submit", (e) => {     // "escuta" evento submit do form
     e.preventDefault()      // evita envio do form
+    const CHANCES = escolhePrimeiro()   // constante com o número máximo de chances
+    disable()   // desativa os botões radio
+
     const numero = Number(frm.inNumero.value)   // obtém número digitado
     if (numero == sorteado) {   // se acertou
         respDica.innerText = `Parabéns!! Número sorteado: ${sorteado}`
